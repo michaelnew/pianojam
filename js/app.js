@@ -135,21 +135,17 @@ function onMIDIMessage(message) {
 	switch(type){
 		case 144: // noteOn message
 			if (velocity > 0) {
-				MIDI.noteOn(0, note, velocity, 0);
 				piano.toggleKey(note, true);
 				beatVisualizer.triggerNearestNodeOnChannel(note, currentNumericBeat + percentAccumulator);
 			} else {
-				MIDI.noteOff(0, note, 0);
 				piano.toggleKey(note, false);
 			}
 			break;
 		case 128: // noteOff message
-			MIDI.noteOff(0, note, 0);
 			piano.toggleKey(note, false);
-			// noteOff(note, velocity);
 			break;
 	}
-if (channel != 8 && channel != 14) {
+	if (channel != 8 && channel != 14) {
 		console.log('data', data, 'cmd', cmd, 'channel', channel);
 	}
 	// logger(keyData, 'key data', data);
