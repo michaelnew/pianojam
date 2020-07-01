@@ -27,6 +27,7 @@ require( 'midi-plugin-webaudio' );
 require( 'midi-plugin-webmidi' );
 
 // TODO: globals are gross
+var allKeymaps;
 var keyCodeMap;
 var player;
 var piano;
@@ -41,10 +42,23 @@ var currentBeat = 0;
 var currentNumericBeat = 0;
 var lastBeat = 0;
 
+function updateKeymap() {
+	let kmButton = $('#keymapButton');
+	let map = "QWERTY";
+	if (kmButton) {
+		map = kmButton.html();
+	}
+	map = map.toLowerCase();
+
+	if (allKeymaps[map]) {
+		keyCodeMap = allKeymaps[map];
+	}
+}
 
 $( document ).ready(function() {
 	$.getJSON( "data/test.json", function( data ) {
-		keyCodeMap = data["keymap"];
+		allKeymaps = data;
+		keyCodeMap = data["qwerty"];
 
 	});
 	getMIDIInput();
@@ -194,6 +208,18 @@ function muteToggle() {
 	}
 }
 
+function keymapRotate() {
+	let b = $("#keymapButton");
+
+	let t = b.html();
+	if (t == "QWERTY") {
+		b.html("DVORAK");
+	} else {
+		b.html("QWERTY");
+	}
+	updateKeymap();
+}
+
 function tempoUp() {
 	tempo(tempo()+1)
 	$("#tempo").val(tempo());
@@ -219,7 +245,7 @@ function tempoFocusLost(e) {
 function keyCodeToNote(kc) {
 	var translated = keyCodeMap[kc];
 	if (translated == null) {
-		translated = kc;
+		return null;
 	}
 
 	return translated;
@@ -238,7 +264,11 @@ document.onkeydown = function (e) {
 
 	e = e || window.event;
 
+	console.log(e);
 	var note = keyCodeToNote(e.keyCode);
+	if (!note) {
+		return;
+	}
 	var alreadyTriggered = false;
 
     for (var i = 0, kc; kc = triggeredKeyCodes[i]; i++) {
@@ -265,6 +295,9 @@ document.onkeyup = function (e) {
 
 	//console.log("keyup fired " + e.keyCode);
 	var note = keyCodeToNote(e.keyCode);
+	if (!note) {
+		return;
+	}
 	MIDI.noteOff(0, note, 0);
 
 	piano.toggleKey(note, false);
@@ -391,5 +424,9 @@ $( () => {
 	.on( 'click', '#beatSoundButton', e => {
 		e.preventDefault();
 		beatSoundToggle();
-	} );
+	} )
+	.on( 'click', '#keymapButton', e => {
+		e.preventDefault();
+		keymapRotate();
+	});
 } );

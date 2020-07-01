@@ -114,6 +114,32 @@ body {
 	font-size:2em;
 }
 
+#keymappingLabel {
+	position:absolute;
+	left:36px;
+	top:260px;
+	border:none;
+	outline:none;
+	color: #4ad3e4;
+	background-color:#222;
+	font-family:"Roboto";
+	font-weight:400;
+	font-size:1em;
+}
+
+#keymapButton {
+	position:absolute;
+	left:108px;
+	top:248px;
+	border:none;
+	outline:none;
+	color: #fff;
+	background-color:#222;
+	font-family:"Roboto";
+	font-weight:100;
+	font-size:2em;
+}
+
 .streakContainer {
 	position:absolute;
 	top:3px;
