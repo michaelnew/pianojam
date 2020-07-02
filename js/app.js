@@ -27,6 +27,7 @@ require( 'midi-plugin-webaudio' );
 require( 'midi-plugin-webmidi' );
 
 // TODO: globals are gross
+var allKeymaps;
 var keyCodeMap;
 var player;
 var piano;
@@ -41,10 +42,23 @@ var currentBeat = 0;
 var currentNumericBeat = 0;
 var lastBeat = 0;
 
+function updateKeymap() {
+	let kmButton = $('#keymapButton');
+	let map = "QWERTY";
+	if (kmButton) {
+		map = kmButton.html();
+	}
+	map = map.toLowerCase();
+
+	if (allKeymaps[map]) {
+		keyCodeMap = allKeymaps[map];
+	}
+}
 
 $( document ).ready(function() {
 	$.getJSON( "data/test.json", function( data ) {
-		keyCodeMap = data["keymap"];
+		allKeymaps = data;
+		keyCodeMap = data["qwerty"];
 
 	});
 	getMIDIInput();
@@ -194,6 +208,18 @@ function muteToggle() {
 	}
 }
 
+function keymapRotate() {
+	let b = $("#keymapButton");
+
+	let t = b.html();
+	if (t == "QWERTY") {
+		b.html("DVORAK");
+	} else {
+		b.html("QWERTY");
+	}
+	updateKeymap();
+}
+
 function tempoUp() {
 	tempo(tempo()+1)
 	$("#tempo").val(tempo());
@@ -255,8 +281,8 @@ document.onkeydown = function (e) {
 		//beatVisualizer.addNodeToChannel(note, currentBeat);
 		beatVisualizer.triggerNearestNodeOnChannel(note, currentNumericBeat + percentAccumulator);
 
-		//keyCodeRecorder.push(e.keyCode);
-		//console.log(keyCodeRecorder);
+		// keyCodeRecorder.push(e.keyCode);
+		// console.log(keyCodeRecorder);
 	}
 };
 
@@ -391,5 +417,9 @@ $( () => {
 	.on( 'click', '#beatSoundButton', e => {
 		e.preventDefault();
 		beatSoundToggle();
-	} );
+	} )
+	.on( 'click', '#keymapButton', e => {
+		e.preventDefault();
+		keymapRotate();
+	});
 } );
