@@ -245,7 +245,7 @@ function tempoFocusLost(e) {
 function keyCodeToNote(kc) {
 	var translated = keyCodeMap[kc];
 	if (translated == null) {
-		return kc;
+		translated = kc;
 	}
 
 	return translated;
