@@ -245,7 +245,7 @@ function tempoFocusLost(e) {
 function keyCodeToNote(kc) {
 	var translated = keyCodeMap[kc];
 	if (translated == null) {
-		return null;
+		return kc;
 	}
 
 	return translated;
@@ -264,11 +264,7 @@ document.onkeydown = function (e) {
 
 	e = e || window.event;
 
-	console.log(e);
 	var note = keyCodeToNote(e.keyCode);
-	if (!note) {
-		return;
-	}
 	var alreadyTriggered = false;
 
     for (var i = 0, kc; kc = triggeredKeyCodes[i]; i++) {
@@ -285,8 +281,8 @@ document.onkeydown = function (e) {
 		//beatVisualizer.addNodeToChannel(note, currentBeat);
 		beatVisualizer.triggerNearestNodeOnChannel(note, currentNumericBeat + percentAccumulator);
 
-		//keyCodeRecorder.push(e.keyCode);
-		//console.log(keyCodeRecorder);
+		// keyCodeRecorder.push(e.keyCode);
+		// console.log(keyCodeRecorder);
 	}
 };
 
@@ -295,9 +291,6 @@ document.onkeyup = function (e) {
 
 	//console.log("keyup fired " + e.keyCode);
 	var note = keyCodeToNote(e.keyCode);
-	if (!note) {
-		return;
-	}
 	MIDI.noteOff(0, note, 0);
 
 	piano.toggleKey(note, false);

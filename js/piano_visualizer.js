@@ -46,7 +46,7 @@ PianoVisualizer.prototype.topCenterForKey = function(note) {
 
 PianoVisualizer.prototype.topCenterForAllKeys = function(note) {
 	let keyInfos = [];
-    for (let key in this.keyMap) {
+	for (let key in this.keyMap) {
 		let k = this.keyMap[key];
 		let w = k.isBlack ? blackKeyWidth * .5 : keyWidth * .5;
 		let p = k.shape.x + w;
@@ -117,9 +117,9 @@ PianoVisualizer.prototype.generateKeys = function(start, end) {
 		p++;
 	}
 
-	//console.log(this.keyMap);
+	// console.log(this.keyMap);
 
-    for (let i = 0, k; k = blackKeys[i]; i++) {
+	for (let i = 0, k; k = blackKeys[i]; i++) {
 		this.stage.setChildIndex(k.shape, this.stage.getNumChildren()-1);
 	}
 }
@@ -130,7 +130,7 @@ function key(position, note, isBlack, clickCallback) {
 	this.currentBeat = 0;
 
 	this.shape = new Shape;
-	
+
 	let k = this;
 	this.shape.addEventListener("mousedown", function(event) {
 		k.toggle(true);
